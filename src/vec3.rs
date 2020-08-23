@@ -74,6 +74,14 @@ impl AddAssign for Vec3 {
     }
 }
 
+impl Add<f64> for Vec3 {
+    type Output = Self;
+
+    fn add(self, other: f64) -> Self::Output {
+        Self::new(self.x + other, self.y + other, self.z + other)
+    }
+}
+
 impl Sub for Vec3 {
     type Output = Self;
 
