@@ -1,0 +1,3 @@
+fn main() {
+    ppm::output();
+}
