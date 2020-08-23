@@ -6,8 +6,12 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    pub fn new(x: f64, y: f64, z: f64) -> Self {
-        Self { x, y, z }
+    pub fn new(x: impl Into<f64>, y: impl Into<f64>, z: impl Into<f64>) -> Self {
+        Self {
+            x: x.into(),
+            y: y.into(),
+            z: z.into(),
+        }
     }
 
     pub fn length(self) -> f64 {
@@ -111,6 +115,14 @@ impl MulAssign<f64> for Vec3 {
         self.x *= other;
         self.y *= other;
         self.z *= other;
+    }
+}
+
+impl Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, other: Vec3) -> Self::Output {
+        Vec3::new(self * other.x, self * other.y, self * other.z)
     }
 }
 
