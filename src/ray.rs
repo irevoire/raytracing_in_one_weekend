@@ -28,14 +28,14 @@ impl Ray {
 
     pub fn hit_sphere(&self, sphere: &Sphere) -> Option<f64> {
         let oc = self.orig - sphere.center;
-        let a = self.dir.dot(self.dir);
-        let b = 2.0 * oc.dot(self.dir);
-        let c = oc.dot(oc) - sphere.radius * sphere.radius;
-        let discriminant = b * b - 4. * a * c;
+        let a = self.dir.length_squared();
+        let half_b = oc.dot(self.dir);
+        let c = oc.length_squared() - sphere.radius * sphere.radius;
+        let discriminant = half_b * half_b - a * c;
         if discriminant < 0. {
             None
         } else {
-            Some((-b - discriminant.sqrt()) / (2. * a))
+            Some((-half_b - discriminant.sqrt()) / a)
         }
     }
 }
