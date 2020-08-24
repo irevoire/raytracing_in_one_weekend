@@ -1,9 +1,9 @@
-use crate::{Color, Point3, Sphere, Vec3};
+use crate::{Color, Hittable, Point3, Sphere, Vec3};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Ray {
-    orig: Point3,
-    dir: Vec3,
+    pub orig: Point3,
+    pub dir: Vec3,
 }
 
 impl Ray {
@@ -16,26 +16,14 @@ impl Ray {
     }
 
     pub fn color(&self) -> Color {
-        if let Some(t) = self.hit_sphere(&Sphere::new(Point3::new(0, 0, -1), 0.5)) {
-            let N = self.at(t) - Vec3::new(0, 0, -1);
+        let sphere = Sphere::new(Point3::new(0, 0, -1), 0.5);
+        if let Some(record) = sphere.hit(self, 0., 100.) {
+            let N = self.at(record.t) - Vec3::new(0, 0, -1);
             0.5 * (N + 1.)
         } else {
             let direction = self.dir.unit();
             let t = 0.5 * direction.y + 1.0;
             (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
-        }
-    }
-
-    pub fn hit_sphere(&self, sphere: &Sphere) -> Option<f64> {
-        let oc = self.orig - sphere.center;
-        let a = self.dir.length_squared();
-        let half_b = oc.dot(self.dir);
-        let c = oc.length_squared() - sphere.radius * sphere.radius;
-        let discriminant = half_b * half_b - a * c;
-        if discriminant < 0. {
-            None
-        } else {
-            Some((-half_b - discriminant.sqrt()) / a)
         }
     }
 }

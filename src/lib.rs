@@ -1,3 +1,5 @@
+pub mod hittable;
+pub use hittable::{HitRecord, Hittable};
 mod ray;
 pub use ray::Ray;
 mod sphere;
