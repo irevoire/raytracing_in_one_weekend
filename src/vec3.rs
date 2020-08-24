@@ -38,12 +38,17 @@ impl Vec3 {
         self / 3.0
     }
 
-    pub fn color(self) -> String {
+    pub fn color(self, samples_per_pixel: usize) -> String {
+        let scale = 1. / samples_per_pixel as f64;
+
+        let r = self.x * scale;
+        let g = self.y * scale;
+        let b = self.z * scale;
         format!(
             "{} {} {}",
-            (255.999 * self.x) as u64,
-            (255.999 * self.y) as u64,
-            (255.999 * self.z) as u64
+            (256. * r.clamp(0., 0.999)) as u64,
+            (256. * g.clamp(0., 0.999)) as u64,
+            (256. * b.clamp(0., 0.999)) as u64,
         )
     }
 }

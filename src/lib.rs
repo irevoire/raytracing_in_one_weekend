@@ -1,3 +1,5 @@
+#![feature(clamp)]
+
 pub mod hittable;
 pub use hittable::{HitRecord, Hittable};
 mod ray;
@@ -6,6 +8,8 @@ mod sphere;
 pub use sphere::Sphere;
 mod vec3;
 pub use vec3::Vec3;
+mod camera;
+pub use camera::Camera;
 
 pub type Point3 = Vec3;
 pub type Color = Vec3;

@@ -1,4 +1,4 @@
-use crate::{Color, Hittable, Point3, Sphere, Vec3};
+use crate::{Color, Hittable, Point3, Vec3};
 
 #[derive(Debug, Clone)]
 pub struct Ray {
