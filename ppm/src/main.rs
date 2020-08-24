@@ -6,6 +6,13 @@ fn main() {
     let image_width = 400;
     let image_height = (image_width as f64 / aspect_ratio) as usize;
 
+    // world
+    let mut world = World::new();
+    let tmp = Sphere::new(Point3::new(0, 0, -1), 0.5);
+    world.push(&tmp);
+    let tmp = Sphere::new(Point3::new(0, -100.5, -1), 100.);
+    world.push(&tmp);
+
     // camera properties
     let viewport_height = 2.0;
     let viewport_width = aspect_ratio * viewport_height;
@@ -31,7 +38,7 @@ fn main() {
                 origin,
                 lower_left_corner + u * horizontal + v * vertical - origin,
             );
-            let color = r.color();
+            let color = r.color(&world);
 
             println!("{}", color.color());
         }

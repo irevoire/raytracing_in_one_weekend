@@ -31,10 +31,7 @@ pub trait Hittable {
     fn hit(&self, r: &Ray, tmin: f64, tmax: f64) -> Option<HitRecord>;
 }
 
-impl<T> Hittable for &[T]
-where
-    T: Hittable,
-{
+impl Hittable for &[&dyn Hittable] {
     fn hit(&self, r: &Ray, tmin: f64, tmax: f64) -> Option<HitRecord> {
         let mut res = None;
         let mut closest_so_far = tmax;

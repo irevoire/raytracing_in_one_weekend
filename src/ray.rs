@@ -15,15 +15,13 @@ impl Ray {
         self.orig + self.dir * t
     }
 
-    pub fn color(&self) -> Color {
-        let sphere = Sphere::new(Point3::new(0, 0, -1), 0.5);
-        if let Some(record) = sphere.hit(self, 0., 100.) {
-            let N = self.at(record.t) - Vec3::new(0, 0, -1);
-            0.5 * (N + 1.)
+    pub fn color(&self, world: &[&dyn Hittable]) -> Color {
+        if let Some(record) = world.hit(self, 0., f64::INFINITY) {
+            0.5 * (record.normal + Color::new(1, 1, 1))
         } else {
-            let direction = self.dir.unit();
-            let t = 0.5 * direction.y + 1.0;
-            (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
+            let unit_direction = self.dir.unit();
+            let t = 0.5 * (unit_direction.y + 1.);
+            (1.0 - t) * Color::new(1, 1, 1) + t * Color::new(0.5, 0.7, 1)
         }
     }
 }
