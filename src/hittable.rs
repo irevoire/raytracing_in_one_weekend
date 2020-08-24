@@ -30,3 +30,22 @@ impl HitRecord {
 pub trait Hittable {
     fn hit(&self, r: &Ray, tmin: f64, tmax: f64) -> Option<HitRecord>;
 }
+
+impl<T> Hittable for &[T]
+where
+    T: Hittable,
+{
+    fn hit(&self, r: &Ray, tmin: f64, tmax: f64) -> Option<HitRecord> {
+        let mut res = None;
+        let mut closest_so_far = tmax;
+
+        for hittable in self.iter() {
+            if let Some(record) = hittable.hit(r, tmin, closest_so_far) {
+                closest_so_far = record.t;
+                res = Some(record);
+            }
+        }
+
+        res
+    }
+}
