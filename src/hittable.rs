@@ -1,19 +1,19 @@
 use crate::{Material, Point3, Ray, Vec3};
 
-#[derive(Debug, Clone)]
-pub struct HitRecord {
+#[derive(Clone)]
+pub struct HitRecord<'a> {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: &'static dyn Material,
+    pub material: &'a dyn Material,
     pub t: f64,
     pub front_face: bool,
 }
 
-impl HitRecord {
+impl<'a> HitRecord<'a> {
     pub fn new(
         p: Point3,
         normal: Vec3,
-        material: &'static dyn Material,
+        material: &'a dyn Material,
         t: f64,
         front_face: bool,
     ) -> Self {

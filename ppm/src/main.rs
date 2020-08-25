@@ -11,9 +11,10 @@ fn main() {
 
     // world
     let mut world = World::new();
-    let tmp = Sphere::new(Point3::new(0, 0, -1), 0.5);
+    let mat = Lambertian::new(Color::new(0.5, 0.5, 0.5));
+    let tmp = Sphere::new(Point3::new(0, 0, -1), 0.5, &mat);
     world.push(&tmp);
-    let tmp = Sphere::new(Point3::new(0, -100.5, -1), 100.);
+    let tmp = Sphere::new(Point3::new(0, -100.5, -1), 100., &mat);
     world.push(&tmp);
 
     // camera
