@@ -7,6 +7,7 @@ fn main() {
     let image_width = 400;
     let image_height = (image_width as f64 / aspect_ratio) as usize;
     let samples_per_pixel = 100;
+    let max_depth = 50;
 
     // world
     let mut world = World::new();
@@ -33,7 +34,7 @@ fn main() {
                 let v = (j as f64 + rng.gen::<f64>()) / (image_height - 1) as f64;
 
                 let r = camera.get_ray(u, v);
-                color += r.color(&world);
+                color += r.color(&world, max_depth);
             }
             println!("{}", color.color(samples_per_pixel));
         }

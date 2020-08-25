@@ -15,10 +15,15 @@ impl Ray {
         self.orig + self.dir * t
     }
 
-    pub fn color(&self, world: &[&dyn Hittable]) -> Color {
+    pub fn color(&self, world: &[&dyn Hittable], depth: usize) -> Color {
+        // If we've exceeded the ray bounce limit, no more light is gathered.
+        if depth == 0 {
+            return Color::new(0, 0, 0);
+        }
+
         if let Some(record) = world.hit(self, 0., f64::INFINITY) {
             let target = record.p + record.normal + Point3::random_in_unit_sphere();
-            0.5 * Self::new(record.p, target - record.p).color(world)
+            0.5 * Self::new(record.p, target - record.p).color(world, depth - 1)
         } else {
             let unit_direction = self.dir.unit();
             let t = 0.5 * (unit_direction.y + 1.);
