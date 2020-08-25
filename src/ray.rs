@@ -21,7 +21,7 @@ impl Ray {
             return Color::new(0, 0, 0);
         }
 
-        if let Some(record) = world.hit(self, 0., f64::INFINITY) {
+        if let Some(record) = world.hit(self, 0.001, f64::INFINITY) {
             let target = record.p + record.normal + Point3::random_in_unit_sphere();
             0.5 * Self::new(record.p, target - record.p).color(world, depth - 1)
         } else {
