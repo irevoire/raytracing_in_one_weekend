@@ -47,6 +47,15 @@ impl Vec3 {
         }
     }
 
+    pub fn random_unit_vector() -> Self {
+        let mut rng = rand::thread_rng();
+
+        let a = rng.gen_range(0., 2. * std::f64::consts::PI);
+        let z: f64 = rng.gen_range(-1., 1.);
+        let r = (1. - z * z).sqrt();
+        Vec3::new(r * a.cos(), r * a.sin(), z)
+    }
+
     pub fn length(self) -> f64 {
         self.length_squared().sqrt()
     }
