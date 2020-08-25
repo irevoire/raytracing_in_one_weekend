@@ -17,7 +17,8 @@ impl Ray {
 
     pub fn color(&self, world: &[&dyn Hittable]) -> Color {
         if let Some(record) = world.hit(self, 0., f64::INFINITY) {
-            0.5 * (record.normal + Color::new(1, 1, 1))
+            let target = record.p + record.normal + Point3::random_in_unit_sphere();
+            0.5 * Self::new(record.p, target - record.p).color(world)
         } else {
             let unit_direction = self.dir.unit();
             let t = 0.5 * (unit_direction.y + 1.);

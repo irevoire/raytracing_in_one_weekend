@@ -1,3 +1,5 @@
+use rand::Rng;
+
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vec3 {
     pub x: f64,
@@ -11,6 +13,37 @@ impl Vec3 {
             x: x.into(),
             y: y.into(),
             z: z.into(),
+        }
+    }
+
+    /// return a random generated vector between 0 and 1
+    pub fn random() -> Self {
+        let mut rng = rand::thread_rng();
+        Self {
+            x: rng.gen(),
+            y: rng.gen(),
+            z: rng.gen(),
+        }
+    }
+
+    /// return a random generated vector in the specified range
+    /// Panic if low >= high
+    pub fn random_range(low: impl Into<f64>, high: impl Into<f64>) -> Self {
+        let (low, high) = (low.into(), high.into());
+        let mut rng = rand::thread_rng();
+        Self {
+            x: rng.gen_range(low, high),
+            y: rng.gen_range(low, high),
+            z: rng.gen_range(low, high),
+        }
+    }
+
+    pub fn random_in_unit_sphere() -> Self {
+        loop {
+            let v = Self::random_range(-1, 1);
+            if v.length_squared() < 1. {
+                return v;
+            }
         }
     }
 
