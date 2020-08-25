@@ -11,11 +11,20 @@ fn main() {
 
     // world
     let mut world = World::new();
-    let mat = Lambertian::new(Color::new(0.5, 0.5, 0.5));
-    let tmp = Sphere::new(Point3::new(0, 0, -1), 0.5, &mat);
-    world.push(&tmp);
-    let tmp = Sphere::new(Point3::new(0, -100.5, -1), 100., &mat);
-    world.push(&tmp);
+    let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0));
+    let material_center = Lambertian::new(Color::new(0.7, 0.3, 0.3));
+    let material_left = Metal::new(Color::new(0.8, 0.8, 0.8));
+    let material_right = Metal::new(Color::new(0.8, 0.6, 0.2));
+
+    let ground = Sphere::new(Point3::new(0, -100.5, -1), 100., &material_ground);
+    let center = Sphere::new(Point3::new(0, 0, -1), 0.5, &material_center);
+    let left = Sphere::new(Point3::new(-1, 0, -1), 0.5, &material_left);
+    let right = Sphere::new(Point3::new(1, 0, -1), 0.5, &material_right);
+
+    world.push(&ground);
+    world.push(&center);
+    world.push(&left);
+    world.push(&right);
 
     // camera
     let camera = Camera::default();
