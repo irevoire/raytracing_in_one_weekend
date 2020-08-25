@@ -18,12 +18,16 @@ impl Ray {
     pub fn color(&self, world: &[&dyn Hittable], depth: usize) -> Color {
         // If we've exceeded the ray bounce limit, no more light is gathered.
         if depth == 0 {
-            return Color::new(0, 0, 0);
+            return Color::default();
         }
 
         if let Some(record) = world.hit(self, 0.001, f64::INFINITY) {
-            let target = record.p + record.normal.random_in_hemisphere();
-            0.5 * Self::new(record.p, target - record.p).color(world, depth - 1)
+            let mut attenuation = Color::default();
+            if let Some(scattered) = record.material.scatter(self, &record, &mut attenuation) {
+                attenuation * scattered.color(world, depth - 1)
+            } else {
+                Color::default()
+            }
         } else {
             let unit_direction = self.dir.unit();
             let t = 0.5 * (unit_direction.y + 1.);

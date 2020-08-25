@@ -90,6 +90,10 @@ impl Vec3 {
         self / 3.0
     }
 
+    pub fn reflect(self, normal: Self) -> Self {
+        self - 2. * self.dot(normal) * normal
+    }
+
     pub fn color(self, samples_per_pixel: usize) -> String {
         let scale = 1. / samples_per_pixel as f64;
 
