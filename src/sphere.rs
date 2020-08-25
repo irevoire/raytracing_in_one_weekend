@@ -1,14 +1,19 @@
-use crate::{HitRecord, Hittable, Point3, Ray};
+use crate::{HitRecord, Hittable, Material, Point3, Ray};
 
 #[derive(Debug, Clone)]
 pub struct Sphere {
     pub center: Point3,
     pub radius: f64,
+    pub material: &'static dyn Material,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64) -> Self {
-        Self { center, radius }
+    pub fn new(center: Point3, radius: f64, material: &'static dyn Material) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 }
 
@@ -26,7 +31,7 @@ impl Hittable for Sphere {
                 let p = r.at(t);
                 let normal = (p - self.center) / self.radius;
                 let outward_normal = (p - self.center) / self.radius;
-                let mut rec = HitRecord::new(p, normal, t, false);
+                let mut rec = HitRecord::new(p, normal, self.material, t, false);
                 rec.set_face_normal(r, outward_normal);
                 return Some(rec);
             }
@@ -36,7 +41,7 @@ impl Hittable for Sphere {
                 let p = r.at(t);
                 let normal = (p - self.center) / self.radius;
                 let outward_normal = (p - self.center) / self.radius;
-                let mut rec = HitRecord::new(p, normal, t, false);
+                let mut rec = HitRecord::new(p, normal, self.material, t, false);
                 rec.set_face_normal(r, outward_normal);
                 return Some(rec);
             }
