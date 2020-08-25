@@ -2,6 +2,8 @@
 
 pub mod hittable;
 pub use hittable::{HitRecord, Hittable};
+pub mod material;
+pub use material::Material;
 mod ray;
 pub use ray::Ray;
 mod sphere;
