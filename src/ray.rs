@@ -22,7 +22,7 @@ impl Ray {
         }
 
         if let Some(record) = world.hit(self, 0.001, f64::INFINITY) {
-            let target = record.p + record.normal + Point3::random_unit_vector();
+            let target = record.p + record.normal.random_in_hemisphere();
             0.5 * Self::new(record.p, target - record.p).color(world, depth - 1)
         } else {
             let unit_direction = self.dir.unit();
