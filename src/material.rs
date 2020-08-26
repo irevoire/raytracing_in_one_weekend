@@ -1,4 +1,5 @@
 use crate::*;
+use rand::Rng;
 
 pub trait Material {
     fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color) -> Option<Ray>;
@@ -68,6 +69,12 @@ impl Dielectric {
     pub fn new(ref_idx: f64) -> Self {
         Self { ref_idx }
     }
+
+    pub fn schlick(cosine: f64, ref_idx: f64) -> f64 {
+        let r0 = (1. - ref_idx) / (1. + ref_idx);
+        let r0 = r0 * r0;
+        r0 + (1. - r0) * (1. - cosine).powi(5)
+    }
 }
 
 impl Material for Dielectric {
@@ -82,12 +89,13 @@ impl Material for Dielectric {
         let cos_theta = (-unit_direction).dot(rec.normal).min(1.);
         let sin_theta = (1. - (cos_theta * cos_theta)).sqrt();
 
-        if etai_over_etat * sin_theta > 1. {
-            // must reflect
+        let mut rng = rand::thread_rng();
+        if (etai_over_etat * sin_theta > 1.)
+            || (rng.gen::<f64>() < Self::schlick(cos_theta, etai_over_etat))
+        {
             let reflected = unit_direction.reflect(rec.normal);
             Some(Ray::new(rec.p, reflected))
         } else {
-            // can refract
             let refracted = unit_direction.refract(rec.normal, etai_over_etat);
             Some(Ray::new(rec.p, refracted))
         }
