@@ -77,9 +77,19 @@ impl Material for Dielectric {
             true => 1. / self.ref_idx,
             false => self.ref_idx,
         };
-
         let unit_direction = r_in.dir.unit();
-        let refracted = unit_direction.refract(rec.normal, etai_over_etat);
-        Some(Ray::new(rec.p, refracted))
+
+        let cos_theta = (-unit_direction).dot(rec.normal).min(1.);
+        let sin_theta = (1. - (cos_theta * cos_theta)).sqrt();
+
+        if etai_over_etat * sin_theta > 1. {
+            // must reflect
+            let reflected = unit_direction.reflect(rec.normal);
+            Some(Ray::new(rec.p, reflected))
+        } else {
+            // can refract
+            let refracted = unit_direction.refract(rec.normal, etai_over_etat);
+            Some(Ray::new(rec.p, refracted))
+        }
     }
 }
