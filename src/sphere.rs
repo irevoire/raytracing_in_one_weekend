@@ -22,16 +22,15 @@ impl<'a> Hittable for Sphere<'a> {
         let oc = r.orig - self.center;
         let a = r.dir.length_squared();
         let half_b = oc.dot(r.dir);
-        let c = oc.length_squared() - self.radius * self.radius;
-        let discriminant = half_b * half_b - a * c;
+        let c = oc.length_squared() - self.radius.powi(2);
+        let discriminant = half_b.powi(2) - a * c;
         if discriminant > 0. {
             let root = discriminant.sqrt();
             let t = (-half_b - root) / a;
             if t < tmax && t > tmin {
                 let p = r.at(t);
-                let normal = (p - self.center) / self.radius;
                 let outward_normal = (p - self.center) / self.radius;
-                let mut rec = HitRecord::new(p, normal, self.material, t, false);
+                let mut rec = HitRecord::new(p, outward_normal, self.material, t, false);
                 rec.set_face_normal(r, outward_normal);
                 return Some(rec);
             }
@@ -39,9 +38,8 @@ impl<'a> Hittable for Sphere<'a> {
             let t = (-half_b + root) / a;
             if t < tmax && t > tmin {
                 let p = r.at(t);
-                let normal = (p - self.center) / self.radius;
                 let outward_normal = (p - self.center) / self.radius;
-                let mut rec = HitRecord::new(p, normal, self.material, t, false);
+                let mut rec = HitRecord::new(p, outward_normal, self.material, t, false);
                 rec.set_face_normal(r, outward_normal);
                 return Some(rec);
             }

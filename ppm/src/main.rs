@@ -11,7 +11,7 @@ fn main() {
 
     // world
     let mut world = World::new();
-    let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0));
+    let material_ground = Metal::new(Color::new(0.8, 0.8, 0), 0);
     let material_top = Metal::new(Color::new(0.8, 0.8, 0), 0);
     let material_center = Dielectric::new(1.5);
     let material_left = Metal::new(Color::new(0.8, 0.8, 0.8), 0.3);
