@@ -1,6 +1,5 @@
-#![feature(clamp)]
-
 pub mod hittable;
+pub(crate) mod rand;
 pub use hittable::{HitRecord, Hittable};
 pub mod material;
 pub use material::*;

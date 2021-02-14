@@ -1,4 +1,4 @@
-use rand::Rng;
+use crate::rand::*;
 
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vec3 {
@@ -18,11 +18,10 @@ impl Vec3 {
 
     /// return a random generated vector between 0 and 1
     pub fn random() -> Self {
-        let mut rng = rand::thread_rng();
         Self {
-            x: rng.gen(),
-            y: rng.gen(),
-            z: rng.gen(),
+            x: random_double(),
+            y: random_double(),
+            z: random_double(),
         }
     }
 
@@ -30,11 +29,10 @@ impl Vec3 {
     /// Panic if low >= high
     pub fn random_range(low: impl Into<f64>, high: impl Into<f64>) -> Self {
         let (low, high) = (low.into(), high.into());
-        let mut rng = rand::thread_rng();
         Self {
-            x: rng.gen_range(low, high),
-            y: rng.gen_range(low, high),
-            z: rng.gen_range(low, high),
+            x: random_double_range(low, high),
+            y: random_double_range(low, high),
+            z: random_double_range(low, high),
         }
     }
 
@@ -48,10 +46,8 @@ impl Vec3 {
     }
 
     pub fn random_unit_vector() -> Self {
-        let mut rng = rand::thread_rng();
-
-        let a = rng.gen_range(0., 2. * std::f64::consts::PI);
-        let z: f64 = rng.gen_range(-1., 1.);
+        let a = random_double_range(0., 2. * std::f64::consts::PI);
+        let z: f64 = random_double_range(-1., 1.);
         let r = (1. - z * z).sqrt();
         Vec3::new(r * a.cos(), r * a.sin(), z)
     }

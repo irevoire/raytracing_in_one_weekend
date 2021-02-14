@@ -1,5 +1,5 @@
+use crate::rand::random_double;
 use crate::*;
-use rand::Rng;
 
 pub trait Material {
     fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color) -> Option<Ray>;
@@ -89,9 +89,8 @@ impl Material for Dielectric {
         let cos_theta = (-unit_direction).dot(rec.normal).min(1.);
         let sin_theta = (1. - (cos_theta * cos_theta)).sqrt();
 
-        let mut rng = rand::thread_rng();
         if (etai_over_etat * sin_theta > 1.)
-            || (rng.gen::<f64>() < Self::schlick(cos_theta, etai_over_etat))
+            || (random_double() < Self::schlick(cos_theta, etai_over_etat))
         {
             let reflected = unit_direction.reflect(rec.normal);
             Some(Ray::new(rec.p, reflected))
